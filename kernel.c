@@ -77,7 +77,19 @@ void vga_write(const char* info, size_t size)
 {
     for (size_t i = 0; i < size; i++)
     {
-        size_t index = terminal_row * VGA_HEIGHT + terminal_column;
+
+        if (info[i] == '\n')
+        {
+            terminal_column = 0;
+            terminal_row++;
+
+            if (terminal_row == VGA_HEIGHT)
+                terminal_row = 0;
+
+            continue;
+        }
+
+        size_t index = terminal_row * VGA_WIDTH + terminal_column;
         terminal_buffer[index] = vga_entry(info[i],terminal_color);
         terminal_column++;
         if (terminal_column == VGA_WIDTH)
@@ -90,12 +102,6 @@ void vga_write(const char* info, size_t size)
         {
             terminal_row = 0;
         }
-
-        if (terminal_buffer[index] == '\n')
-        {
-            terminal_column = 0;
-            terminal_row++;
-        }
     }
 }
 
@@ -106,6 +112,7 @@ void main(void)
     terminal_initialize();
 
     vga_write(palavra,strlen(palavra));
+    vga_write("ola",strlen("ola"));
 
     while(1);
 }
