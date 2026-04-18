@@ -115,7 +115,7 @@ void main(void)
     terminal_initialize();
     terminal_setcolor(vga_entry_color(VGA_COLOR_LIGHT_GREY,VGA_COLOR_BLACK));
     vga_write(palavra,strlen(palavra));
-    vga_write("hi",strlen("hi"));
+    vga_write("hi\n",strlen("hi"));
 
     while(1);
 }
