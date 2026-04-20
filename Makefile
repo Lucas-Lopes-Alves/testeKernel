@@ -2,6 +2,8 @@ PLACE?=isos/teste.iso
 ISO?=teste
 DESTINY?=isos
 
+.PHONY: debug
+
 build: kernel.c boot.s
 	i686-elf-gcc -ffreestanding -nostdlib -c kernel.c -o bin/kernel.o
 	i686-elf-as boot.s -o bin/boot.o
@@ -17,13 +19,13 @@ buildwsl: kernel.c boot.s
 	i686-elf-gcc.exe -T kernel.ld bin/kernel.o bin/boot.o -o iso/boot/kernel.elf -ffreestanding -nostdlib -lgcc
 	grub-mkrescue iso -o $(DESTINY)/$(ISO).iso
 
-dbug: kernel.c boot.s
+debug: kernel.c boot.s
 	i686-elf-gcc -ffreestanding -nostdlib -c kernel.c -g -o bin/Dkernel.o
 	i686-elf-as boot.s -o bin/Dboot.o
 	i686-elf-gcc -ffreestanding -nostdlib -T kernel.ld bin/Dkernel.o bin/Dboot.o -o debug/iso/boot/Dkernel.elf -ffreestanding -nostdlib -lgcc
 	grub-mkrescue debug/iso -o isos/debug.iso
 
-dbugwsl: kernel.c boot.s
+debugwsl: kernel.c boot.s
 	i686-elf-gcc.exe -ffreestanding -nostdlib -c kernel.c -g -o bin/Dkernel.o
 	i686-elf-as.exe boot.s -o bin/Dboot.o
 	i686-elf-gcc.exe -ffreestanding -nostdlib -T kernel.ld bin/Dkernel.o bin/Dboot.o -o debug/iso/boot/Dkernel.elf -ffreestanding -nostdlib -lgcc

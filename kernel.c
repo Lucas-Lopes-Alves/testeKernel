@@ -82,22 +82,25 @@ void terminal_setcolor(uint8_t color)
 
 void terminal_scroll()
 {
-    size_t total = VGA_HEIGHT * VGA_WIDTH;
-    for (size_t j = 0; j < total; j++)
+    for(size_t i = 1; i < VGA_HEIGHT; i++)
     {
-        int value = (int)j - VGA_WIDTH;
-        if (value < 0)
+        for (size_t j = 0; j < VGA_WIDTH;j++)
         {
-            terminal_buffer[j] = ' ';
-        }
-        else
-        {
-            terminal_buffer[value] = terminal_buffer[j];
-            terminal_buffer[j] = ' ';
+            int value = (i-1)*VGA_WIDTH+j;
+            int position = i*VGA_WIDTH+j;
+            terminal_buffer[value] = terminal_buffer[position];
+        
         }
     }
-    terminal_row = VGA_WIDTH - 1;
+
+    size_t line = (VGA_HEIGHT-1) * VGA_WIDTH;
+    for (size_t k = 0; k < VGA_WIDTH; k++)
+    {
+        terminal_buffer[k+line] = vga_entry(' ',vga_entry_color(VGA_COLOR_LIGHT_GREY,VGA_COLOR_BLACK));
+    }
+    terminal_row = VGA_HEIGHT-1;
 }
+
 // function that writes in the screen and go to the next line
 // when find the '\n' character
 void vga_write(const char *info, size_t size)
