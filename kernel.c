@@ -25,12 +25,12 @@ enum vga_color
 
 // function for setting the color in the terminal in the vga mode
 // returns a size_t with the value of the foreground and background
-uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg)
+static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg)
 {
     return fg | (bg << 4);
 }
 
-uint16_t vga_entry(unsigned char c, uint8_t color)
+static inline uint16_t vga_entry(unsigned char c, uint8_t color)
 {
     return (uint16_t)c | (uint16_t)(color << 8);
 }
@@ -80,6 +80,8 @@ void terminal_setcolor(uint8_t color)
     terminal_color = color;
 }
 
+// scrolls the terminal up by taking each line one line up and
+// cleaning the last line
 void terminal_scroll()
 {
     for(size_t i = 1; i < VGA_HEIGHT; i++)
@@ -102,7 +104,8 @@ void terminal_scroll()
 }
 
 // function that writes in the screen and go to the next line
-// when find the '\n' character
+// when find the '\n' character, if it detects it's in the last line
+// it scrolls the terminal up by invocating the terminal_scroll function
 void vga_write(const char *info, size_t size)
 {
     if (terminal_row >= VGA_HEIGHT)
@@ -134,19 +137,16 @@ void vga_write(const char *info, size_t size)
     }
 }
 
+void vga_writestring(const char* string)
+{
+    vga_write(string,strlen(string));
+}
+
 void kernel_main(void)
 {
     terminal_initialize();
-    terminal_setcolor(vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK));
-
-    vga_write("test\n", strlen("test\n"));
-    vga_write("hi\n", strlen("hi\n"));
-
-    for (int i = 0; i < 24; i++)
-    {
-        vga_write("oi\n", strlen("oi\n"));
-    }
-    vga_write("ola\n",strlen("ola\n"));
+    
+    vga_writestring("Hello World Kernel!?!?!?!?!!?!?!?!?");
 
     while (1);
 }
