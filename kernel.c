@@ -41,8 +41,8 @@ static inline uint16_t vga_entry(unsigned char c, uint8_t color)
 #define VGA_HEIGHT 25
 #define VGA_MEMORY 0xB8000
 
-// The terminal_buffer is volatile to prevent some otimizations
-// that can slow down the acess to the vga memory
+// The terminal_buffer set as volatile to prevent otimizations
+// that can ignore the acess to the memory
 size_t terminal_row = 0;
 size_t terminal_column = 0;
 uint8_t terminal_color;
@@ -103,13 +103,13 @@ void terminal_scroll()
 }
 
 /*
-    Writes a single character to the vga buffer
-
-    Handles:
-        The '\n' character to jump to a new line
-        If the line is the last it Triggers the Scrolls
-        If the column is the last, it goes to a new line and the start of a new line
-*/
+ *  Writes a single character to the vga buffer
+ *
+ *  Handles:
+ *      The '\n' character to jump to a new line
+ *      If the line is the last it Triggers the Scrolls
+ *      If the column is the last, it goes to a new line and the start of a new line
+ */
 void vga_putchar(char c, size_t size)
 {
     if (terminal_row >= VGA_HEIGHT)
