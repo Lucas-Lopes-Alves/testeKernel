@@ -146,7 +146,7 @@ void vga_write(const char *info, size_t size)
     }
 }
 
-// Invokes the vga_write and handles the string's lenght
+// Invokes the vga_write and handles the string's length
 void vga_writestring(const char *string)
 {
     vga_write(string, kstrlen(string));
