@@ -13,7 +13,10 @@ OBJS += $(patsubst src/%.s, bin/%.o, $(SRCS_S))
 DOBJS := $(patsubst src/%.c, debugBin/D%.o, $(SRCS_C))
 DOBJS += $(patsubst src/%.s, debugBin/D%.o, $(SRCS_S))
 
-all: build
+all: structure build
+
+structure:
+	@mkdir -p bin debug debugBin include iso/boot/grub isos obj src
 
 #Build section
 build: $(OBJS)
@@ -43,17 +46,17 @@ debug: $(DOBJS)
 	grub-mkrescue debug/iso -o isos/Debug.iso
 
 debugBin/D%.o: src/%.c
-	$(CC) $(CFLAGS) -g -c $< -o $@
+	$(CC) $(CFLAGS) -g -O0 -c $< -o $@
 
 debugBin/D%.o: src/%.s
 	$(AS) $< -o $@
 #End debug
 
 emulate:
-	qemu-system-i386 -cdrom $(PLACE)
+	@qemu-system-i386 -cdrom $(PLACE)
 
 clean:
-	rm -r /bin
+	@rm -f ./bin/* ./isos/* ./debugBin/* ./iso/boot/*.elf ./debug/iso/boot/*.elf
 
 teste:
 	@echo $(DOBJS)
