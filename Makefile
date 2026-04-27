@@ -12,7 +12,7 @@ OBJS += $(patsubst src/%.s, obj/%.o, $(SRCS_S))
 DOBJS := $(patsubst src/%.c, debugBin/D%.o, $(SRCS_C))
 DOBJS += $(patsubst src/%.s, debugBin/D%.o, $(SRCS_S))
 
-# Checks if the folders exists to create them if not and don't create if exists
+# Checks if the folders exists to create them if not exists and don't create if it exists
 $(shell mkdir -p bin debug/iso/boot/grub debugBin include iso/boot/grub isos obj src)
 
 .PHONY: debug clean all build emulate iso
@@ -49,7 +49,7 @@ debug: $(DOBJS)
 	@echo "Linking the debug object files"
 	@$(CC) $(LDFLAGS) -T kernel.ld $(DOBJS) -o debug/iso/boot/Dkernel.elf
 	@echo "Creating the iso at isos/"
-	@grub-mkrescue debug/iso -o isos/Debug.iso > /dev/null 2>&1
+	@grub-mkrescue debug/iso -o isos/debug.iso > /dev/null 2>&1
 	@echo "Iso created"
 
 debugBin/D%.o: src/%.c

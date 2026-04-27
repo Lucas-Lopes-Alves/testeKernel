@@ -9,3 +9,8 @@ char* keyboard_scancode(uint8_t port, char* out)
     out[1] = digits[key & 0xF];
     return out;
 }
+
+char* keyboard_char(const char* scancode, char* out)
+{
+    
+}
